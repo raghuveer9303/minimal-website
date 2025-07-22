@@ -197,6 +197,46 @@ body {
         return false;
     });
 })();
+</script>
+<script>
+// Protection against unwanted navigation in iframe content
+(function() {
+    'use strict';
+    
+    // Prevent all navigation attempts
+    document.addEventListener('click', function(e) {
+        const target = e.target.closest('a');
+        if (target && target.href) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Navigation prevented for:', target.href);
+            return false;
+        }
+    }, true);
+    
+    // Prevent form submissions
+    document.addEventListener('submit', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Form submission prevented');
+        return false;
+    }, true);
+    
+    // Override window.open
+    const originalOpen = window.open;
+    window.open = function() {
+        console.log('window.open() prevented');
+        return null;
+    };
+    
+    // Prevent hash changes that could affect parent
+    window.addEventListener('hashchange', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Hash change prevented');
+        return false;
+    });
+})();
 </script></head>
 <body class="font-body text-apex-charcoal bg-apex-light antialiased">
     <!-- Navigation -->
@@ -253,7 +293,7 @@ body {
                     </div>
                     <div class="hidden lg:flex justify-center items-center reveal">
                         <div class="w-96 h-96 rounded-full bg-gradient-to-br from-apex-blue to-blue-400 flex items-center justify-center shadow-2xl">
-                            <i data-lucide="database-zap" class="text-white w-48 h-48 opacity-80"></i>
+                            <i data-lucide="cloud-cog" class="text-white w-48 h-48 opacity-80"></i>
                         </div>
                     </div>
                 </div>
